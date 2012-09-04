@@ -18,13 +18,14 @@ import com.vellut.fungeworld.io.ProgramWriter;
 public class FungeWorldBoard implements MemoryReaderWriter {
 
 	Instruction[][] board;
-	int numRows, numCols;
+	int width, height;
 	Interpreter interpreter;
 
-	public FungeWorldBoard(int numRows, int numCols) {
-		this.numRows = numRows;
-		this.numCols = numCols;
-		board = new Instruction[numRows][numCols];
+	// Same order as Mason
+	public FungeWorldBoard(int width, int height) {
+		this.width = width;
+		this.height = height;
+		board = new Instruction[width][height];
 		interpreter = new Interpreter(2, this);
 		clearBoard();
 	}
@@ -44,9 +45,9 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 	public void load(Instruction[][] program, int[] offset) {
 		// Assume size of board is sufficient
 		for(int i = 0; i < program.length; i++) {
-		  Instruction[] line = program[i];
-		  Instruction[] boardLine = board[offset[0] + i];
-		  System.arraycopy(line, 0, boardLine, offset[1], line.length);
+			for (int j = 0; j < program[i].length; j++) {
+				board[offset[0] + i][offset[1] + j] = program[i][j];
+			}
 		}
 	}
 
@@ -64,8 +65,7 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 			try {
 				int[] currentIP = interpreter.getInstructionPointer();
 				if (!isIndexValid(currentIP)) {
-					currentIP = correctIndex(currentIP);
-					interpreter.correctInstructionPointer(currentIP);
+					correctIndex(currentIP);
 				}
 				Instruction instr = getData(currentIP);
 				interpreter.executeInstruction(instr);
@@ -82,16 +82,12 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 	}
 
 	private boolean isIndexValid(int[] index) {
-		int rows = index[0];
-		int cols = index[1];
-		return (rows < numRows && cols < numCols);
+		return (index[0] < width && index[1] < height);
 	}
 
-	private int[] correctIndex(int[] index) {
-		int[] indexCorr = new int[2];
-		indexCorr[0] = index[0] % numRows;
-		indexCorr[1] = index[1] % numCols;
-		return indexCorr;
+	private void correctIndex(int[] index) {
+		index[0] = index[0] % width;
+		index[1] = index[1] % height;
 	}
 
 	@Override
@@ -120,7 +116,7 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 		try {
 			// Just read the board
 			if (!isIndexValid(index)) {
-				index = correctIndex(index);
+				correctIndex(index);
 			}
 			interpreter.onReadResponse(getData(index));
 		} catch (InterpreterException e) {
@@ -131,7 +127,7 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 	@Override
 	public void write(int[] index, Instruction value) {
 		if (!isIndexValid(index)) {
-			index = correctIndex(index);
+			correctIndex(index);
 		}
 		board[index[0]][index[1]] = value;
 	}
