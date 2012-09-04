@@ -41,12 +41,6 @@ public class Interpreter {
 		state = InterpreterState.RUNNING;
 	}
 
-	// In case the IP has gone beyond the limits of the game Matrix,
-	// this can be called to correct it
-	public void correctInstructionPointer(int[] instructionPointer) {
-		this.instructionPointer = instructionPointer;
-	}
-
 	// In case timeout for a read reached
 	public void correctState(InterpreterState state) {
 		this.state = state;
@@ -161,12 +155,12 @@ public class Interpreter {
 			}
 				break;
 			case END:
-				this.state = InterpreterState.KILLED;
+				state = InterpreterState.KILLED;
 				break;
 			case READ: {
 				int y = popIntegerOperand();
 				int x = popIntegerOperand();
-				this.state = InterpreterState.EXPECTING_READ_RESPONSE;
+				state = InterpreterState.EXPECTING_READ_RESPONSE;
 				memoryReaderWriter.read(new int[] { x, y });
 			}
 				break;
@@ -181,9 +175,7 @@ public class Interpreter {
 
 			}
 
-			if(this.state != InterpreterState.KILLED) {
-				incrementInstructionPointer();
-			}
+			incrementInstructionPointer();
 		}
 	}
 
@@ -239,9 +231,10 @@ public class Interpreter {
 		if (state == InterpreterState.EXPECTING_READ_RESPONSE) {
 			executionStack.push(instr);
 			state = InterpreterState.RUNNING;
+		} else {
+			throw new InterpreterException("Bad state: Expected "
+					+ InterpreterState.EXPECTING_READ_RESPONSE);
 		}
-		throw new InterpreterException("Bad state: Expected "
-				+ InterpreterState.EXPECTING_READ_RESPONSE);
 	}
 
 	// When a wait for a write on a memory location is set, this method must
@@ -251,9 +244,10 @@ public class Interpreter {
 		if (state == InterpreterState.WAITING_FOR_WRITE_RELEASE) {
 			executionStack.push(instr);
 			state = InterpreterState.RUNNING;
+		} else {
+			throw new InterpreterException("Bad state: Expected "
+					+ InterpreterState.WAITING_FOR_WRITE_RELEASE);
 		}
-		throw new InterpreterException("Bad state: Expected "
-				+ InterpreterState.WAITING_FOR_WRITE_RELEASE);
 	}
 
 	public MemoryReaderWriter getMemoryReaderWriter() {
