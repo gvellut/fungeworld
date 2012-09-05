@@ -1,5 +1,7 @@
 package com.vellut.fungeworld.mason;
 
+import java.util.Stack;
+
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Int2D;
@@ -35,9 +37,7 @@ public class Process implements Steppable, MemoryReaderWriter {
 		sim = (Simulation) state;
 		Int2D position = sim.processGrid.getObjectLocation(this);
 		Instruction instruction = (Instruction) sim.instructionGrid.field[position.x][position.y];
-		if (id < 1) {
-			System.out.println(id + " " + instruction.getInstructionType());
-		}
+
 		try {
 			interpreter.executeInstruction(instruction);
 		} catch (InterpreterException e) {
@@ -49,15 +49,12 @@ public class Process implements Steppable, MemoryReaderWriter {
 			System.out.println("Killed " + id + " " + sim.schedule.getSteps());
 			sim.processGrid.remove(this);
 		} else {
-			// Always correct the IP of the interpreter
 			int[] ip = interpreter.getInstructionPointer();
 			if (!isIndexValid(ip)) {
 				correctIndex(ip);
 			}
-			if (id < 1) {
-				System.out.println(id + " X " + ip[0] + " Y " + ip[1]);
-			}
-			// Move
+
+			// Move (sync with internal position of interpreter)
 			sim.processGrid.setObjectLocation(this, ip[0], ip[1]);
 			sim.schedule.scheduleOnceIn(1, this);
 		}
@@ -100,6 +97,42 @@ public class Process implements Steppable, MemoryReaderWriter {
 	@Override
 	public void waitUntilWrite(int[] memoryCell) {
 		// FIXME implement when the instruction is added to interpreter
+	}
+
+	// Properties for MASON Inspector
+
+	public int getId() {
+		return id;
+	}
+
+	// TODO implement setters (make sure the position is also
+	// updated on grid)
+	public int getInstructionPointerX() {
+		return interpreter.getInstructionPointer()[0];
+	}
+
+	public int getInstructionPointerY() {
+		return interpreter.getInstructionPointer()[1];
+	}
+
+	public int getDeltaInstructionPointerX() {
+		return interpreter.getDeltaInstructionPointer()[0];
+	}
+
+	public int getDeltaInstructionPointerY() {
+		return interpreter.getDeltaInstructionPointer()[1];
+	}
+
+	// TODO create inspector for the full stack
+	public String getTopInstruction() {
+		Stack<Instruction> execStack = interpreter.getExecutionStack();
+		if (!execStack.isEmpty()) {
+			Instruction instruction = execStack.peek();
+			if (instruction != null) {
+				return instruction.toString();
+			}
+		}
+		return null;
 	}
 
 }

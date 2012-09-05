@@ -39,4 +39,13 @@ public class Instruction {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		if (attachedData == null) {
+			return instructionType.toString();
+		} else {
+			return instructionType + " => " + attachedData;
+		}
+	}
+
 }

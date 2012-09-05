@@ -8,7 +8,7 @@ public enum InstructionType {
 	// 1st (X) for left/right; 2nd (Y) for up/down
 	// Y points down (so incr Y is V)
 	ABS_DPOS_INCR_0(">"), ABS_DPOS_DECR_0("<"), ABS_DPOS_INCR_1("v"), ABS_DPOS_DECR_1(
-			"^"), ABS_DPOS_COND_0("|"), ABS_DPOS_COND_1("_"), READ("g"), WRITE(
+			"^"), ABS_DPOS_COND_0("_"), ABS_DPOS_COND_1("|"), READ("g"), WRITE(
 			"p"), NOOP("."), END("@");
 
 	private String representation;

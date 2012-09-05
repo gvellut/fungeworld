@@ -274,4 +274,8 @@ public class Interpreter {
 		return state;
 	}
 
+	public Stack<Instruction> getExecutionStack() {
+		return executionStack;
+	}
+
 }
