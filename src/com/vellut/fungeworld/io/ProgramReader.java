@@ -25,52 +25,60 @@ public class ProgramReader {
 		List<String> lines = IOUtils.readLines(is, "UTF-8");
 		int numLines = lines.size();
 		int numColumns = 0;
-		for (String line : lines) {
-			if (line.length() > numColumns) {
-				numColumns = line.length();
-			}
-		}
-
-		Instruction[][] program = new Instruction[numColumns][numLines];
-		Instruction noop = new Instruction(InstructionType.NOOP);
 		
+		// First pass : get the words
+		String[][] parsedLines = new String[numLines][];
 		for (int currentLineIndex = 0; currentLineIndex < numLines; currentLineIndex++) {
 			String line = lines.get(currentLineIndex).trim();
-
-			int currentWordIndex = 0;
 			if (!line.isEmpty()) {
 				String[] words = line.split(";");
-				for (currentWordIndex = 0; currentWordIndex < words.length; currentWordIndex++) {
-					String word = words[currentWordIndex];
-
-					// First char of instruction is sufficient to determine its
-					// type
-					String char1 = word.substring(0, 1);
-					InstructionType iType = stringToInstructionTypeMap
-							.get(char1);
-					if (iType == null) {
-						throw new ProgramReaderException(
-								"Unknown instruction: " + word);
-					}
-
-					Instruction instr = new Instruction(iType);
-
-					if (iType == InstructionType.INTEGER) {
-						// Integer has attached data: After 1st character
-						String intData = word.substring(1);
-						instr.setAttachedData(Integer.valueOf(intData));
-					}
-
-					program[currentWordIndex][currentLineIndex] = instr;
+				if (words.length > numColumns) {
+					numColumns = words.length;
 				}
+				parsedLines[currentLineIndex] = words;
+			} else {
+				parsedLines[currentLineIndex] = new String[0];
 			}
-			
-			// fill the rest with NOOP
-			for (int restLine = currentWordIndex; restLine < numColumns; restLine++) {
-				program[restLine][currentLineIndex] = noop;
+
+		}
+
+		// Second pass : get the whole program in a rectangular grid
+		Instruction[][] program = new Instruction[numColumns][numLines];
+		Instruction noop = new Instruction(InstructionType.NOOP);
+
+		// Go through the columns in a line first
+		for (int j = 0; j < numLines; j++) {
+			int i;
+			for (i = 0; i < parsedLines[j].length; i++) {
+				String word = parsedLines[j][i];
+
+				// First char of instruction is sufficient to determine its
+				// type
+				String char1 = word.substring(0, 1);
+				InstructionType iType = stringToInstructionTypeMap.get(char1);
+				if (iType == null) {
+					throw new ProgramReaderException("Unknown instruction: "
+							+ word);
+				}
+
+				Instruction instr = new Instruction(iType);
+
+				if (iType == InstructionType.INTEGER) {
+					// Integer has attached data: After 1st character
+					String intData = word.substring(1);
+					instr.setAttachedData(Integer.valueOf(intData));
+				}
+
+				program[i][j] = instr;
+			}
+
+			// Fill the rest with NOOP (so the whole rectangle is filled
+			// with instructions)
+			for (int restLine = i; restLine < numColumns; restLine++) {
+				program[restLine][j] = noop;
 			}
 		}
-		
+
 		return program;
 	}
 	
