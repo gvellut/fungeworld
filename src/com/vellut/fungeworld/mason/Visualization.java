@@ -54,6 +54,7 @@ public class Visualization extends GUIState {
 		setupPortrayals();
 	}
 
+	@Override
 	public void load(SimState state) {
 		super.load(state);
 		setupPortrayals();
