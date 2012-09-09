@@ -20,39 +20,43 @@ public class ProgramReaderTest {
 		InputStream is = this.getClass().getClassLoader()
 				.getResourceAsStream("data/simple.fw");
 		Instruction[][] program = reader.readProgram(is);
-		assertEquals(1, program.length);
+		assertEquals(7, program.length);
 
-		Instruction[] line = program[0];
-		assertEquals(7, line.length);
+		Instruction[] column = program[0];
+		assertEquals(1, column.length);
 
-		assertEquals(InstructionType.INTEGER, line[0].getInstructionType());
-		assertNotNull(line[0].getAttachedData());
-		int intValue = (Integer) line[0].getAttachedData();
+		assertEquals(InstructionType.INTEGER,
+				program[0][0].getInstructionType());
+		assertNotNull(program[0][0].getAttachedData());
+		int intValue = (Integer) program[0][0].getAttachedData();
 		assertEquals(1, intValue);
 
-		assertEquals(InstructionType.INTEGER, line[1].getInstructionType());
-		assertNotNull(line[1].getAttachedData());
-		intValue = (Integer) line[1].getAttachedData();
+		assertEquals(InstructionType.INTEGER,
+				program[1][0].getInstructionType());
+		assertNotNull(program[1][0].getAttachedData());
+		intValue = (Integer) program[1][0].getAttachedData();
 		assertEquals(2, intValue);
 
-		assertEquals(InstructionType.ADD, line[2].getInstructionType());
-		assertNull(line[2].getAttachedData());
+		assertEquals(InstructionType.ADD, program[2][0].getInstructionType());
+		assertNull(program[2][0].getAttachedData());
 
-		assertEquals(InstructionType.INTEGER, line[3].getInstructionType());
-		assertNotNull(line[3].getAttachedData());
-		intValue = (Integer) line[3].getAttachedData();
-		assertEquals(1, intValue);
-
-		assertEquals(InstructionType.INTEGER, line[4].getInstructionType());
-		assertNotNull(line[4].getAttachedData());
-		intValue = (Integer) line[4].getAttachedData();
+		assertEquals(InstructionType.INTEGER,
+				program[3][0].getInstructionType());
+		assertNotNull(program[3][0].getAttachedData());
+		intValue = (Integer) program[3][0].getAttachedData();
 		assertEquals(0, intValue);
 
-		assertEquals(InstructionType.WRITE, line[5].getInstructionType());
-		assertNull(line[5].getAttachedData());
+		assertEquals(InstructionType.INTEGER,
+				program[4][0].getInstructionType());
+		assertNotNull(program[4][0].getAttachedData());
+		intValue = (Integer) program[4][0].getAttachedData();
+		assertEquals(1, intValue);
 
-		assertEquals(InstructionType.END, line[6].getInstructionType());
-		assertNull(line[6].getAttachedData());
+		assertEquals(InstructionType.WRITE, program[5][0].getInstructionType());
+		assertNull(program[5][0].getAttachedData());
+
+		assertEquals(InstructionType.END, program[6][0].getInstructionType());
+		assertNull(program[6][0].getAttachedData());
 	}
 
 }

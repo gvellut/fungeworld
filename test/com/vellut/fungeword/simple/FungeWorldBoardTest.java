@@ -29,7 +29,7 @@ public class FungeWorldBoardTest {
 		Instruction input = board[0][1];
 		assertEquals(InstructionType.NOOP, input.getInstructionType());
 		
-		// The program simple.fw outputs a 3 at coordinates [1,0]
+		// The program simple.fw outputs a 3 at coordinates [0,1]
 		fw.run(new int[] { 0, 0 }, new int[] { 1, 0 });
 
 		Instruction output = board[0][1];
