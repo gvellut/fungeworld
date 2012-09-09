@@ -43,6 +43,7 @@ public class FungeWorldBoardTest {
 		ProgramReader reader = new ProgramReader();
 		// The program outputs itself
 		// see http://www.nyx.net/~gthompso/self_bf.txt
+		// by Andrew Turley
 		InputStream is = this.getClass().getClassLoader()
 				.getResourceAsStream("data/troll1.fw");
 		Instruction[][] program = reader.readProgram(is);
@@ -61,7 +62,7 @@ public class FungeWorldBoardTest {
 				shouldBe.add(program[i][j]);
 			}
 			// The original troll does I/O slightly differently
-			// and outputs the ASCII value 10 (newline) between
+			// and outputs the character with ASCII value 10 (newline) between
 			// each line. However we don't do any conversion to/from ASCII
 			Instruction instr10 = new Instruction(InstructionType.INTEGER);
 			instr10.setAttachedData(10);
@@ -71,6 +72,28 @@ public class FungeWorldBoardTest {
 		assertEquals(shouldBe.size(), response.size());
 		for (int i = 0; i < response.size(); i++) {
 			assertEquals(shouldBe.get(i), response.get(i));
+		}
+
+	}
+
+	@Test
+	public void testTroll2Execution() throws Exception {
+		FungeWorldBoard fw = new FungeWorldBoard(100, 100);
+		ProgramReader reader = new ProgramReader();
+		// The program copies itself
+		InputStream is = this.getClass().getClassLoader()
+				.getResourceAsStream("data/troll2.fw");
+		Instruction[][] program = reader.readProgram(is);
+		fw.load(program, new int[] { 0, 0 });
+
+		fw.run(new int[] { 0, 0 }, new int[] { 1, 0 });
+
+		Instruction[][] board = fw.getInstructionBoard();
+		// check that copy (which starts at 20) is identical to program
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 4; j++) {
+				assertEquals(program[i][j], board[i + 20][j]);
+			}
 		}
 
 	}
