@@ -34,9 +34,8 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 	private void clearBoard() {
 		Instruction noop = new Instruction(InstructionType.NOOP);
 		for (int i = 0; i < board.length; i++) {
-			Instruction[] boardLine = board[i];
-			for (int j = 0; j < boardLine.length; j++) {
-				boardLine[j] = noop;
+			for (int j = 0; j < board[i].length; j++) {
+				board[i][j] = noop;
 			}
 		}
 	}
@@ -44,7 +43,7 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 	// Load a rectangle of instructions at a certain coordinate
 	public void load(Instruction[][] program, int[] offset) {
 		// Assume size of board is sufficient
-		for(int i = 0; i < program.length; i++) {
+		for (int i = 0; i < program.length; i++) {
 			for (int j = 0; j < program[i].length; j++) {
 				board[offset[0] + i][offset[1] + j] = program[i][j];
 			}
@@ -148,7 +147,7 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 			FileInputStream fis = new FileInputStream(args[0]);
 			Instruction[][] program = reader.readProgram(fis);
 			board.load(program, new int[]{0,0});
-			board.run(new int[]{0, 0}, new int[]{0,1});
+			board.run(new int[] { 0, 0 }, new int[] { 1, 0 });
 			System.out.println(board.toString());
 		} catch (IOException | ProgramReaderException e) {
 			e.printStackTrace();

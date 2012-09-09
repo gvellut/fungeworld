@@ -24,13 +24,15 @@ public class FungeWorldBoardTest {
 		
 		Instruction[][] board = fw.getInstructionBoard();
 
-		Instruction input = board[1][0];
+		Instruction input = board[0][1];
 		assertEquals(InstructionType.NOOP, input.getInstructionType());
 		
 		// The program simple.fw outputs a 3 at coordinates [1,0]
-		fw.run(new int[] { 0, 0 }, new int[] { 0, 1 });
+		fw.run(new int[] { 0, 0 }, new int[] { 1, 0 });
 
-		Instruction output = board[1][0];
+		System.out.println(fw.toString());
+
+		Instruction output = board[0][1];
 		assertEquals(InstructionType.INTEGER, output.getInstructionType());
 		assertEquals(Integer.valueOf(3), (Integer) output.getAttachedData());
 	}

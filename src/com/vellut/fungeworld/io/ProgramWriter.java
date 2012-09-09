@@ -15,11 +15,11 @@ public class ProgramWriter {
 	public void writeProgram(OutputStream os, Instruction[][] program) throws IOException {
 		Writer out = new BufferedWriter(new OutputStreamWriter(os));
 		
-		for(int i = 0 ; i < program.length ; i++) {
-			Instruction[] programLine = program[i];
-			for(int j = 0 ; j < programLine.length ; j++) {
-				Instruction instr = programLine[j];
-				if(j != 0) {
+		// we must go through the lines first
+		for (int j = 0; j < program[0].length; j++) {
+			for (int i = 0; i < program.length; i++) {
+				Instruction instr = program[i][j];
+				if (i != 0) {
 					try {
 						// Separator between words
 						out.write(";");
