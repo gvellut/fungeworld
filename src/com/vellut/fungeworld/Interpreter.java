@@ -1,5 +1,7 @@
 package com.vellut.fungeworld;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class Interpreter {
@@ -9,6 +11,7 @@ public class Interpreter {
 	private MemoryReaderWriter memoryReaderWriter;
 	private InterpreterState state;
 	private Stack<Instruction> executionStack;
+	private List<Instruction> output;
 
 	private static final Instruction DEFAULT_OPERAND;
 
@@ -39,6 +42,14 @@ public class Interpreter {
 		this.deltaInstructionPointer = deltaInstructionPointer;
 
 		state = InterpreterState.RUNNING;
+	}
+
+	public void captureOutput(boolean flag) {
+		if (flag) {
+			output = new ArrayList<>();
+		} else {
+			output = null;
+		}
 	}
 
 	// In case timeout for a read reached
@@ -171,6 +182,19 @@ public class Interpreter {
 				memoryReaderWriter.write(new int[] { x, y }, instrValue);
 			}
 				break;
+			case CLEAR: {
+				executionStack.clear();
+			}
+				break;
+			case PRINT: {
+				Instruction opInstr = popOperand();
+				if (output != null) {
+					output.add(opInstr);
+				} else {
+					System.out.println(opInstr);
+				}
+			}
+				break;
 			default:
 
 			}
@@ -256,6 +280,14 @@ public class Interpreter {
 
 	public void setMemoryReaderWriter(MemoryReaderWriter memoryReaderWriter) {
 		this.memoryReaderWriter = memoryReaderWriter;
+	}
+
+	public List<Instruction> getOutput() {
+		if (output != null) {
+			return output;
+		} else {
+			return null;
+		}
 	}
 
 	public int getDimension() {

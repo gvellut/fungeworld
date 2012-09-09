@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import com.vellut.fungeworld.Instruction;
 import com.vellut.fungeworld.InstructionType;
@@ -27,8 +28,10 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 		this.height = height;
 		board = new Instruction[width][height];
 		interpreter = new Interpreter(2, this);
+		interpreter.captureOutput(true);
 		clearBoard();
 	}
+
 
 	// Fills the board with NOOP
 	private void clearBoard() {
@@ -38,6 +41,10 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 				board[i][j] = noop;
 			}
 		}
+	}
+
+	public List<Instruction> getOutput() {
+		return interpreter.getOutput();
 	}
 
 	// Load a rectangle of instructions at a certain coordinate
