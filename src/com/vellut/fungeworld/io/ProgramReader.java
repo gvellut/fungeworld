@@ -65,7 +65,7 @@ public class ProgramReader {
 
 				if (iType == InstructionType.INTEGER) {
 					// Integer has attached data: After 1st character
-					String intData = word.substring(1);
+					String intData = word.substring(1).trim();
 					instr.setAttachedData(Integer.valueOf(intData));
 				}
 
