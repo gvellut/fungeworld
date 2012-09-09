@@ -44,7 +44,7 @@ public class Instruction {
 		if (attachedData == null) {
 			return instructionType.toString();
 		} else {
-			return instructionType + " => " + attachedData;
+			return "" + instructionType + attachedData;
 		}
 	}
 

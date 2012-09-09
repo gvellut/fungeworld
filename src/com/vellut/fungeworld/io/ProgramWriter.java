@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionType;
 
 public class ProgramWriter {
 
@@ -28,13 +27,7 @@ public class ProgramWriter {
 					}
 				}
 				
-				InstructionType iType = instr.getInstructionType();
-				out.write(iType.getRepresentation());
-				
-				if(iType == InstructionType.INTEGER) {
-					int data = (Integer)instr.getAttachedData();
-					out.write(Integer.toString(data));
-				}
+				out.write(instr.toString());
 			}
 			
 			out.write("\r\n");
