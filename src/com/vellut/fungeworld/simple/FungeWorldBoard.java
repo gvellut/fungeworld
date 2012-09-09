@@ -98,10 +98,14 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 
 	@Override
 	public String toString() {
+		return toString(0);
+	}
+
+	public String toString(int minLength) {
 		ProgramWriter pWriter = new ProgramWriter();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			pWriter.writeProgram(baos, board);
+			pWriter.writeProgram(baos, board, minLength);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

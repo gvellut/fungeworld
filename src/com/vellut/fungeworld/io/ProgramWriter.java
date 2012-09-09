@@ -11,7 +11,11 @@ import com.vellut.fungeworld.Instruction;
 
 public class ProgramWriter {
 
-	public void writeProgram(OutputStream os, Instruction[][] program) throws IOException {
+	// If an instruction to output is < minLength, space is added at the end
+	// so its length becomes minLength
+	public void writeProgram(OutputStream os, Instruction[][] program,
+			int minLength)
+			throws IOException {
 		Writer out = new BufferedWriter(new OutputStreamWriter(os));
 		
 		// we must go through the lines first
@@ -27,11 +31,22 @@ public class ProgramWriter {
 					}
 				}
 				
-				out.write(instr.toString());
+				String strInstr = instr.toString();
+				out.write(strInstr);
+				for (int k = strInstr.length(); k < minLength; k++) {
+					out.write(" ");
+				}
+
 			}
 			
 			out.write("\r\n");
 		}
 	}
 	
+	public void writeProgram(OutputStream os, Instruction[][] program)
+			throws IOException {
+		// no padding
+		writeProgram(os, program, 0);
+	}
+
 }
