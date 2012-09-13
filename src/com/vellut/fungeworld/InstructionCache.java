@@ -5,11 +5,13 @@ import java.util.Map;
 
 public class InstructionCache {
 
-	public static Instruction[] instructions;
-	public static Map<InstructionType, Integer> instructionIndex;
-	public static Map<String, InstructionType> instructionRepresentationDictionary;
+	private static Instruction[] instructions;
+	private static Map<InstructionType, Integer> instructionIndex;
+	private static Map<String, InstructionType> instructionRepresentationDictionary;
 
 	static {
+		// TODO change this so the index for an isntructionType is the same
+		// no matter the order of addition of new instructionTypes
 		InstructionType[] instructionTypes = InstructionType.values();
 		instructions = new Instruction[instructionTypes.length];
 		instructionIndex = new HashMap<>();

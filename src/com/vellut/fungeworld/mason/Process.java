@@ -6,13 +6,13 @@ import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Int2D;
 
+import com.vellut.fungeworld.BoardProxy;
 import com.vellut.fungeworld.Instruction;
 import com.vellut.fungeworld.Interpreter;
 import com.vellut.fungeworld.InterpreterException;
 import com.vellut.fungeworld.InterpreterState;
-import com.vellut.fungeworld.MemoryReaderWriter;
 
-public class Process implements Steppable, MemoryReaderWriter {
+public class Process implements Steppable, BoardProxy {
 
 	private static int counter = 0;
 
@@ -97,6 +97,11 @@ public class Process implements Steppable, MemoryReaderWriter {
 	@Override
 	public void waitUntilWrite(int[] memoryCell) {
 		// FIXME implement when the instruction is added to interpreter
+	}
+
+	@Override
+	public void spawn(int[] memoryCell) {
+
 	}
 
 	// Properties for MASON Inspector

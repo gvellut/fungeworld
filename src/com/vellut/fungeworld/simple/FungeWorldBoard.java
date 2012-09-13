@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import com.vellut.fungeworld.BoardProxy;
 import com.vellut.fungeworld.Instruction;
 import com.vellut.fungeworld.InstructionType;
 import com.vellut.fungeworld.Interpreter;
 import com.vellut.fungeworld.InterpreterException;
 import com.vellut.fungeworld.InterpreterState;
-import com.vellut.fungeworld.MemoryReaderWriter;
 import com.vellut.fungeworld.io.ProgramReader;
 import com.vellut.fungeworld.io.ProgramReaderException;
 import com.vellut.fungeworld.io.ProgramWriter;
 
-public class FungeWorldBoard implements MemoryReaderWriter {
+public class FungeWorldBoard implements BoardProxy {
 
 	Instruction[][] board;
 	int width, height;
@@ -144,6 +144,11 @@ public class FungeWorldBoard implements MemoryReaderWriter {
 
 	@Override
 	public void waitUntilWrite(int[] memoryCell) {
+		// Will never be called (only one interpreter on this board)
+	}
+
+	@Override
+	public void spawn(int[] memoryCell) {
 		// Will never be called (only one interpreter on this board)
 	}
 
