@@ -69,8 +69,8 @@ public class Visualization extends GUIState {
 
 		instructionGridPortrayal.setField(sim.instructionGrid);
 		// TODO use color generation instead ?
-		Color[] colors = new Color[10];
-		colors[0] = Color.RED;
+		Color[] colors = new Color[12];
+		colors[0] = Color.LIGHT_GRAY;
 		colors[1] = Color.BLACK;
 		colors[2] = Color.GREEN;
 		colors[3] = Color.ORANGE;
@@ -78,8 +78,10 @@ public class Visualization extends GUIState {
 		colors[5] = Color.PINK;
 		colors[6] = Color.BLUE;
 		colors[7] = Color.GRAY;
-		colors[8] = Color.LIGHT_GRAY;
+		colors[8] = Color.RED;
 		colors[9] = Color.WHITE;
+		colors[10] = new Color(255, 128, 64);
+		colors[11] = new Color(128, 164, 200);
 
 		instructionGridPortrayal.setMap(new SimpleColorMap(colors));
 

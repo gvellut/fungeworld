@@ -58,10 +58,10 @@ public class Simulation extends SimState {
 		int index = random.nextInt(instructionTypes.length);
 		InstructionType instructionType = instructionTypes[index];
 
-		if (instructionType == InstructionType.END) {
-			// replace 99% with dup so not killed too often
-			if (random.nextInt(10) != 9) {
-				instructionType = InstructionType.BRIDGE;
+		if (instructionType == InstructionType.SPAWN) {
+			// replace 80% with dup so not spawned too often
+			if (random.nextInt(10) < 8) {
+				instructionType = InstructionType.NOOP;
 			}
 		}
 
@@ -77,10 +77,11 @@ public class Simulation extends SimState {
 	}
 
 	private void initProcessGrid() {
+		BoardIO boardIO = new BoardIO(1, 6, 10);
 		for (int i = 0; i < numProcesses; i++) {
 			int x = random.nextInt(gridWidth);
 			int y = random.nextInt(gridHeight);
-			Process process = new Process(x, y, 1, 0);
+			Process process = new Process(x, y, 1, 0, boardIO);
 			// Location info is duplicated (in the interpreter and in the
 			// Grid)
 			processGrid.setObjectLocation(process, new Int2D(x, y));
