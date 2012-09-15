@@ -284,9 +284,13 @@ public class Interpreter {
 			break;
 		case JUMP: {
 			int op1 = popIntegerOperand();
-			// No effect if op1 <= 0
-			// same as bridge if op1 == 2
-			for (int i = 0; i < op1; i++) {
+			if (op1 > 0) {
+				// same as bridge if op1 == 2
+				for (int i = 0; i < op1; i++) {
+					incrementInstructionPointer();
+				}
+			} else {
+				// same as bridge so not stuck
 				incrementInstructionPointer();
 			}
 			return false;
