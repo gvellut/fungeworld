@@ -20,9 +20,11 @@ public class Process implements Steppable, BoardProxy {
 	// Need this to access the instructionGrid in the Read method
 	private Simulation sim;
 	private int id;
+	private BoardIO boardIO;
 
-	public Process(int x, int y, int deltaX, int deltaY) {
+	public Process(int x, int y, int deltaX, int deltaY, BoardIO boardIO) {
 		interpreter = new Interpreter(2, this);
+		this.boardIO = boardIO;
 		try {
 			interpreter.setInitialState(new int[] { x, y }, new int[] { deltaX,
 					deltaY });
@@ -77,7 +79,7 @@ public class Process implements Steppable, BoardProxy {
 			correctIndex(memoryCell);
 		}
 		// Here, the read is synchronous
-		Instruction instruction = (Instruction) sim.instructionGrid.field[memoryCell[0]][memoryCell[1]];
+		Instruction instruction = boardIO.read(sim, memoryCell);
 		try {
 			interpreter.onReadResponse(instruction);
 		} catch (InterpreterException e) {
@@ -91,7 +93,7 @@ public class Process implements Steppable, BoardProxy {
 		if (!isIndexValid(memoryCell)) {
 			correctIndex(memoryCell);
 		}
-		sim.instructionGrid.field[memoryCell[0]][memoryCell[1]] = value;
+		boardIO.write(sim, memoryCell, value);
 	}
 
 	@Override
@@ -100,8 +102,16 @@ public class Process implements Steppable, BoardProxy {
 	}
 
 	@Override
-	public void spawn(int[] memoryCell) {
-
+	public void spawn(int[] memoryCell, int[] delta) {
+		if (!isIndexValid(memoryCell)) {
+			correctIndex(memoryCell);
+		}
+		System.out.println("Spawning");
+		Process childProcess = new Process(memoryCell[0], memoryCell[1],
+				delta[0], delta[1], boardIO);
+		sim.processGrid.setObjectLocation(childProcess,
+				memoryCell[0], memoryCell[1]);
+		sim.schedule.scheduleOnceIn(1, childProcess);
 	}
 
 	// Properties for MASON Inspector

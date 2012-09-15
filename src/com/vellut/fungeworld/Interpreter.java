@@ -83,8 +83,8 @@ public class Interpreter {
 		}
 	}
 
-	// FIXME when using vectors, make sure the correct number
-	// of arguments are popped (according to the dimension of
+	// FIXME when using vectors or position or delta, make sure the correct
+	// number of arguments are popped (according to the dimension of
 	// the interpreter)
 	// Returns flag that indicates if DeltaIP must be incremented
 	private boolean runInstruction(Instruction instr) {
@@ -151,7 +151,11 @@ public class Interpreter {
 		case MOD: {
 			int op1 = popIntegerOperand();
 			int op2 = popIntegerOperand();
-			pushInteger(op2 % op1);
+			if (op1 != 0) {
+				pushInteger(op2 % op1);
+			} else {
+				pushInteger(0);
+			}
 		}
 			break;
 		case EQ: {
@@ -220,8 +224,9 @@ public class Interpreter {
 		case SPAWN: {
 			int y = popIntegerOperand();
 			int x = popIntegerOperand();
+			// Spawn child with same delta
 			boardProxy.spawn(new int[] { relativeOrigin[0] + x,
-					relativeOrigin[1] + y });
+					relativeOrigin[1] + y }, deltaInstructionPointer);
 		}
 			break;
 		case REL_DPOS_LEFT: {
@@ -311,8 +316,6 @@ public class Interpreter {
 			Instruction opInstr = popOperand();
 			if (output != null) {
 				output.add(opInstr);
-			} else {
-				System.out.println(opInstr);
 			}
 		}
 			break;

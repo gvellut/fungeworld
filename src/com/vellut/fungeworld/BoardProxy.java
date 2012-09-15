@@ -5,5 +5,5 @@ public interface BoardProxy {
 	void read(int[] memoryCell);
 	void write(int[] memoryCell, Instruction value);
 	void waitUntilWrite(int[] memoryCell);
-	void spawn(int[] memoryCell);
+	void spawn(int[] memoryCell, int[] delta);
 }

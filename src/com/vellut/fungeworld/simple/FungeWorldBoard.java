@@ -148,7 +148,7 @@ public class FungeWorldBoard implements BoardProxy {
 	}
 
 	@Override
-	public void spawn(int[] memoryCell) {
+	public void spawn(int[] memoryCell, int[] delta) {
 		// Will never be called (only one interpreter on this board)
 	}
 
