@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 import com.vellut.fungeworld.BoardProxy;
 import com.vellut.fungeworld.Instruction;
 import com.vellut.fungeworld.InstructionType;
@@ -157,16 +159,19 @@ public class FungeWorldBoard implements BoardProxy {
 	}
 
 	public static void main(String args[]) {
+		FileInputStream fis = null;
 		try {
 			FungeWorldBoard board = new FungeWorldBoard(100, 100);
 			ProgramReader reader = new ProgramReader();
-			FileInputStream fis = new FileInputStream(args[0]);
+			fis = new FileInputStream(args[0]);
 			Instruction[][] program = reader.readProgram(fis);
 			board.load(program, new int[]{0,0});
 			board.run(new int[] { 0, 0 }, new int[] { 1, 0 });
 			System.out.println(board.toString());
 		} catch (IOException | ProgramReaderException e) {
 			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(fis);
 		}
 
 	}

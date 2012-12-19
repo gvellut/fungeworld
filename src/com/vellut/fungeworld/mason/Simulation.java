@@ -1,5 +1,10 @@
 package com.vellut.fungeworld.mason;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+
 import sim.engine.Schedule;
 import sim.engine.SimState;
 import sim.field.grid.ObjectGrid2D;
@@ -8,6 +13,8 @@ import sim.util.Int2D;
 
 import com.vellut.fungeworld.Instruction;
 import com.vellut.fungeworld.InstructionType;
+import com.vellut.fungeworld.io.ProgramReader;
+import com.vellut.fungeworld.io.ProgramReaderException;
 
 public class Simulation extends SimState {
 
@@ -76,12 +83,38 @@ public class Simulation extends SimState {
 		return instruction;
 	}
 
+	private void copyAncestorToXY(int x, int y) {
+		InputStream is = null;
+		try {
+			ProgramReader reader = new ProgramReader();
+			is = this.getClass().getClassLoader()
+					.getResourceAsStream("data/ancestor.fw");
+			Instruction[][] program = reader.readProgram(is);
+			for (int i = 0; i < program.length; i++) {
+				for (int j = 0; j < program[i].length; j++) {
+					instructionGrid.field[instructionGrid.tx(x + i)][instructionGrid
+							.ty(y + j)] = program[i][j];
+				}
+			}
+		} catch (IOException | ProgramReaderException ex) {
+			ex.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+	}
+
 	private void initProcessGrid() {
-		BoardIO boardIO = new BoardIO(1, 6, 10);
+		BoardIO boardIO = new BoardIO(new DefaultMutationStrategy(1), 1, 1);
 		for (int i = 0; i < numProcesses; i++) {
 			int x = random.nextInt(gridWidth);
 			int y = random.nextInt(gridHeight);
+
+			// First, copy ancestor program at x y
+			copyAncestorToXY(x, y);
+
+			// Then create Process starting on x y
 			Process process = new Process(x, y, 1, 0, boardIO);
+
 			// Location info is duplicated (in the interpreter and in the
 			// Grid)
 			processGrid.setObjectLocation(process, new Int2D(x, y));

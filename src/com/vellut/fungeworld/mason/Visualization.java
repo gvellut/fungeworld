@@ -89,6 +89,7 @@ public class Visualization extends GUIState {
 		display.repaint();
 	}
 
+	@Override
 	public void init(Controller c) {
 		super.init(c);
 
@@ -104,7 +105,7 @@ public class Visualization extends GUIState {
 
 
 	public static void main(String[] args) {
-		Visualization viz = new Visualization(2000, 200, 200, 30);
+		Visualization viz = new Visualization(System.nanoTime(), 300, 300, 150);
 		viz.createController();
 	}
 

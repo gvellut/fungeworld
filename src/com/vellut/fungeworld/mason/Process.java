@@ -138,7 +138,7 @@ public class Process implements Steppable, BoardProxy {
 		return interpreter.getDeltaInstructionPointer()[1];
 	}
 
-	// TODO create inspector for the full stack
+	// TODO create MASON inspector for the full stack
 	public String getTopInstruction() {
 		Stack<Instruction> execStack = interpreter.getExecutionStack();
 		if (!execStack.isEmpty()) {

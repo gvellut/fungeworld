@@ -76,6 +76,11 @@ public class Interpreter {
 			if (incr) {
 				incrementInstructionPointer();
 			}
+
+			if (cannotMove()) {
+				state = InterpreterState.KILLED;
+			}
+
 		} else if (state == InterpreterState.QUOTE) {
 			pushInstruction(instr);
 			state = InterpreterState.RUNNING;
@@ -336,6 +341,14 @@ public class Interpreter {
 		}
 	}
 	
+	private boolean cannotMove() {
+		boolean cannot = true;
+		for (int i = 0; i < dimension; i++) {
+			cannot = cannot && deltaInstructionPointer[i] == 0;
+		}
+		return cannot;
+	}
+
 	private void updateDeltaInstructionPointer(int dimension, int deltaValue) {
 		for (int i = 0; i < deltaInstructionPointer.length; i++) {
 			deltaInstructionPointer[i] = 0;
