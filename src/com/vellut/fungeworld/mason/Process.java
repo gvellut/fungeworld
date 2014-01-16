@@ -2,17 +2,21 @@ package com.vellut.fungeworld.mason;
 
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.util.Int2D;
 
-import com.vellut.fungeworld.BoardProxy;
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.Interpreter;
-import com.vellut.fungeworld.InterpreterException;
-import com.vellut.fungeworld.InterpreterState;
+import com.vellut.fungeworld.lang.BoardProxy;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionType;
+import com.vellut.fungeworld.lang.Interpreter;
+import com.vellut.fungeworld.lang.InterpreterException;
+import com.vellut.fungeworld.lang.InterpreterState;
 
 public class Process implements Steppable, BoardProxy {
+	private final static Logger log = Logger.getLogger(Process.class);
 
 	private static int counter = 0;
 
@@ -43,7 +47,7 @@ public class Process implements Steppable, BoardProxy {
 		try {
 			interpreter.executeInstruction(instruction);
 		} catch (InterpreterException e) {
-			// FIXME log to a file
+		
 			e.printStackTrace();
 		}
 
@@ -83,8 +87,7 @@ public class Process implements Steppable, BoardProxy {
 		try {
 			interpreter.onReadResponse(instruction);
 		} catch (InterpreterException e) {
-			// FIXME log to a file
-			e.printStackTrace();
+			log.error("Error reading cell", e);
 		}
 	}
 
@@ -112,6 +115,19 @@ public class Process implements Steppable, BoardProxy {
 		sim.processGrid.setObjectLocation(childProcess,
 				memoryCell[0], memoryCell[1]);
 		sim.schedule.scheduleOnceIn(1, childProcess);
+	}
+	
+	@Override
+	public void mutate(int[] memoryCell, Instruction value) {
+		if (!isIndexValid(memoryCell)) {
+			correctIndex(memoryCell);
+		}
+		
+		// Infinite spawns here
+		if(value.getInstructionType() == InstructionType.SPAWN) {
+			// FIXME extract arbitrary value
+			boardIO.writeRandom(sim,  memoryCell, 40);
+		}
 	}
 
 	// Properties for MASON Inspector

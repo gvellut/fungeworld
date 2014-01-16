@@ -1,7 +1,7 @@
 package com.vellut.fungeworld.mason;
 
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionType;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionType;
 
 public class DefaultMutationStrategy implements MutationStrategy {
 

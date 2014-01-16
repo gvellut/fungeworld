@@ -8,15 +8,15 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.vellut.fungeworld.BoardProxy;
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionType;
-import com.vellut.fungeworld.Interpreter;
-import com.vellut.fungeworld.InterpreterException;
-import com.vellut.fungeworld.InterpreterState;
 import com.vellut.fungeworld.io.ProgramReader;
 import com.vellut.fungeworld.io.ProgramReaderException;
 import com.vellut.fungeworld.io.ProgramWriter;
+import com.vellut.fungeworld.lang.BoardProxy;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionType;
+import com.vellut.fungeworld.lang.Interpreter;
+import com.vellut.fungeworld.lang.InterpreterException;
+import com.vellut.fungeworld.lang.InterpreterState;
 
 public class FungeWorldBoard implements BoardProxy {
 
@@ -142,6 +142,19 @@ public class FungeWorldBoard implements BoardProxy {
 			correctIndex(index);
 		}
 		board[index[0]][index[1]] = value;
+	}
+	
+	@Override
+	public void mutate(int[] index, Instruction value) {
+		if (!isIndexValid(index)) {
+			correctIndex(index);
+		}
+		
+		// Infinite spawns => we replace by another spawn
+		if(value.getInstructionType() == InstructionType.SPAWN) {
+			// reset counter to big value
+			value.setAttachedData(100);
+		}
 	}
 
 	@Override

@@ -8,9 +8,9 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionType;
 import com.vellut.fungeworld.io.ProgramReader;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionType;
 
 public class ProgramReaderTest {
 

@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionType;
 import com.vellut.fungeworld.io.ProgramReader;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionType;
 import com.vellut.fungeworld.simple.FungeWorldBoard;
 
 public class FungeWorldBoardTest {

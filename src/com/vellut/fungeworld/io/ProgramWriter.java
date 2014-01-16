@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import com.vellut.fungeworld.Instruction;
+import com.vellut.fungeworld.lang.Instruction;
 
 public class ProgramWriter {
 

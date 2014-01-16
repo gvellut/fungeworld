@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
+import com.vellut.fungeworld.io.RandomFiller;
+
 import sim.display.Controller;
 import sim.display.Display2D;
 import sim.display.GUIState;
@@ -21,8 +23,10 @@ public class Visualization extends GUIState {
 	FastInstructionGridPortrayal2D instructionGridPortrayal = new FastInstructionGridPortrayal2D();
 
 	public Visualization(long seed, int gridWidth, int gridHeight,
-			int numProcesses) {
-		super(new Simulation(seed, gridWidth, gridHeight, numProcesses));
+			int numProcesses, BoardIO boardIO) {
+		super(new Simulation(seed, gridWidth, gridHeight, numProcesses, boardIO));
+		Simulation sim = (Simulation) this.state;
+		sim.setFiller(new RandomFiller(sim.random));
 	}
 
 	public Visualization(SimState state) {
@@ -105,7 +109,8 @@ public class Visualization extends GUIState {
 
 
 	public static void main(String[] args) {
-		Visualization viz = new Visualization(System.nanoTime(), 300, 300, 150);
+		BoardIO boardIO = new BoardIO(new NoMutationStrategy(), 0, 0);
+		Visualization viz = new Visualization(System.nanoTime(), 300, 300, 150, boardIO);
 		viz.createController();
 	}
 

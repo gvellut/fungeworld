@@ -6,11 +6,21 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.vellut.fungeworld.Instruction;
-import com.vellut.fungeworld.InstructionCache;
-import com.vellut.fungeworld.InstructionType;
+import com.vellut.fungeworld.lang.Instruction;
+import com.vellut.fungeworld.lang.InstructionCache;
+import com.vellut.fungeworld.lang.InstructionType;
 
 public class ProgramReader {
+	
+	private InstructionGridFiller filler;
+	
+	public ProgramReader() {
+		this(new NoopFiller());
+	}
+	
+	public ProgramReader(InstructionGridFiller filler) {
+		this.filler = filler;
+	}
 	
 	// Returns a rectangular grid (filled with NOOP if line is not full)
 	public Instruction[][] readProgram(InputStream is) throws IOException, ProgramReaderException {
@@ -62,15 +72,23 @@ public class ProgramReader {
 					String intData = word.substring(1).trim();
 					instr.setAttachedData(Integer.valueOf(intData));
 				}
+				
+				if(iType == InstructionType.SPAWN) {
+					// attach maximum number of times
+					if(word.length() > 2) {
+						String intData = word.substring(1).trim();
+						instr.setAttachedData(Integer.valueOf(intData));
+					} else {
+						instr.setAttachedData(20);
+					}
+				}
 
 				program[i][j] = instr;
 			}
 
 			// Fill the rest with NOOP (so the whole rectangle is filled
 			// with instructions)
-			for (int restLine = i; restLine < numColumns; restLine++) {
-				program[restLine][j] = noop;
-			}
+			filler.fillLine(program, j, i);
 		}
 
 		return program;

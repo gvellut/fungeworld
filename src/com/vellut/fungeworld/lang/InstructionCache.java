@@ -1,4 +1,4 @@
-package com.vellut.fungeworld;
+package com.vellut.fungeworld.lang;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
 package com.vellut.fungeworld.mason;
 
-import com.vellut.fungeworld.Instruction;
+import com.vellut.fungeworld.Utils;
+import com.vellut.fungeworld.lang.Instruction;
 
 public class BoardIO {
 
@@ -28,6 +29,11 @@ public class BoardIO {
 		if (pcWriteError > sim.random.nextInt(100)) {
 			value = mutationStrategy.mutate(sim, value);
 		}
+		sim.instructionGrid.field[memoryCell[0]][memoryCell[1]] = value;
+	}
+	
+	public void writeRandom(Simulation sim, int[] memoryCell, int maxIntegerValue) {
+		Instruction value = Utils.randomInstruction(sim.random, maxIntegerValue);
 		sim.instructionGrid.field[memoryCell[0]][memoryCell[1]] = value;
 	}
 

@@ -1,0 +1,21 @@
+package com.vellut.fungeworld.lang;
+
+public class InterpreterException extends Exception {
+
+  public InterpreterException() {
+    super();
+  }
+
+  public InterpreterException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public InterpreterException(String message) {
+    super(message);
+  }
+
+  public InterpreterException(Throwable cause) {
+    super(cause);
+  }
+
+}

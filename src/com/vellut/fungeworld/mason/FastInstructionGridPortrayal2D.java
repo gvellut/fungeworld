@@ -2,7 +2,7 @@ package com.vellut.fungeworld.mason;
 
 import sim.portrayal.grid.FastObjectGridPortrayal2D;
 
-import com.vellut.fungeworld.Instruction;
+import com.vellut.fungeworld.lang.Instruction;
 
 // Use this to display the instruction grid
 public class FastInstructionGridPortrayal2D extends
